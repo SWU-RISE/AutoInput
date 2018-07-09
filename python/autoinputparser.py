@@ -55,25 +55,48 @@ class Input(object):
         porter=nltk.PorterStemmer()
         self.index=IndexedText(porter, self.tokens)
         
-        self.tags=nltk.pos_tag(tokens)
+        self.tags=nltk.pos_tag(self.tokens)
         self.num_words=[] #CD cardinal numeral, e.g. 1,2,3 one two three
         for (word, tag) in self.tags:
             if tag=="CD":
                 self.num_words.append(word)
-        
+
+        possible_para_name=[ w for w in self.tokens if len(w)==1 ]
+        print possible_para_name
                 
-    """
-    JJ adjective or numeral, ordinal
-    third ill-mannered pre-war regrettable oiled calamitous first separable
-    ectoplasmic battery-powered participatory fourth still-to-be-named
-    multilingual multi-disciplinary ...
-    ordinal numeral (first, 2nd)
-    """
+                
+        """
+        JJ adjective or numeral, ordinal
+        third ill-mannered pre-war regrettable oiled calamitous first separable
+        ectoplasmic battery-powered participatory fourth still-to-be-named
+        multilingual multi-disciplinary ...
+        ordinal numeral (first, 2nd)
+        """
         self.order_words=[]
-        
-        
+                
 
         self.com_words=[] #JJR  comparative adjective e.g. less, greater
-        
 
+
+
+
+
+if __name__=="__main__":
+    try:
+        conn = psycopg2.connect(database = "onlinejudge", user = "onlinejudge", password = "onlinejudge", host = "47.95.215.87", port = "5111")
+    except:
+        print "I am unable to connect to the database"
+    print "Opened database successfully"
+    cur=conn.cursor()
+    try:
+        cur.execute("""SELECT _id, input_description from problem""")
+    except:
+        print "I can't search in the database"        
+
+
+    rows=cur.fetchall()
+    inputs={}
+    
+    for row in rows:
+        inputs[row[0]]=Input(row[1])
         
