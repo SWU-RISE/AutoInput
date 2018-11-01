@@ -7,7 +7,7 @@ class Parameter(object):
         self.t="integer"
         self.low=0
         self.sup=10000
-        s
+        self.charRand=
 
     def nextElem(self):
         if self.t=="letter":
