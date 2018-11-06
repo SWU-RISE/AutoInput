@@ -8,6 +8,7 @@ from nltk.book import FreqDist
 from bs4 import BeautifulSoup
 from html2text import html2text 
 import psycopg2, random
+from casestruct  import *
 
 
 
@@ -25,9 +26,9 @@ class Input(object):
         soup = BeautifulSoup(html_text)
         self.raw=soup.get_text();
         self.sents=nltk.sent_tokenize(self.raw)
-        print "sentences:"
+        print( "sentences:")
         pprint.pprint(self.sents)
-        print "End sentences."
+        print ("End sentences.")
 
         self.tokens=nltk.word_tokenize(self.raw)
         self.text=nltk.Text(self.tokens)
@@ -41,7 +42,7 @@ class Input(object):
             if tag=="CD":
                 self.num_words.append(word)
                 
-        print self.num_words
+        print( self.num_words)
 
 
         possible_para_name=set([ w for w in self.tokens if len(w)==1 and w.isalpha()])
@@ -51,7 +52,7 @@ class Input(object):
             if isParameter(self.text, p):
                 self.param.append(Parameter(self, p))
                 
-        print "contain:"
+        print( "contain:")
         contain(self.text)
         
                 
@@ -64,7 +65,7 @@ class Input(object):
         ordinal numeral (first, 2nd)
         """
         self.order_words=[]
-                
+        
 
         self.com_words=[] #JJR  comparative adjective e.g. less, greater
 
@@ -72,22 +73,22 @@ class Input(object):
 
 if __name__=="__main__":
     t=Test_case()
-    print t.nextElem()
+    print( t.nextElem())
     exit(0)
     
     for i in  range(10):
-        print randchar('a','h')
+        print( randchar('a','h'))
         
     try:
         conn = psycopg2.connect(database = "onlinejudge", user = "onlinejudge", password = "onlinejudge", host = "47.95.215.87", port = "5111")
     except:
-        print "I am unable to connect to the database"
-    print "Opened database successfully"
-    cur=conn.cursor()
+        print( "I am unable to connect to the database")
+        print( "Opened database successfully")
+        cur=conn.cursor() 
     try:
-        cur.execute("""SELECT _id, input_description from problem""")
+       cur.execute("""SELECT _id, input_description from problem""")
     except:
-        print "I can't search in the database"        
+        print( "I can't search in the database")
 
 
     rows=cur.fetchall()

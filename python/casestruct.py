@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from randvalue import *
 
 class Head(object):
     def __str__(self):
