@@ -22,7 +22,8 @@ class  RandChar(object):
         else:
             return str(chr(random.randint(ord(self.low), ord(self.high))))
 
-
+    def __str__(self):
+        return self.nextElem()+""
 
 class RandInt(object):
     def __init__(self, a=0, b=0):
@@ -35,3 +36,5 @@ class RandInt(object):
             return random.randint(-200,0)
         else:
             return random.randint(self.low, self.high)
+    def __str__(self):
+        return self.nextElem()+""

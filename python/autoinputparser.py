@@ -11,7 +11,7 @@ import psycopg2, random
 from casestruct  import *
 
 from randvalue import *
-
+from nlputil import *
 
 
 BLOCK_TYPE=["line", "case", "file"]
@@ -24,7 +24,8 @@ FOR_WORD=["each", "every" ]
 class Input(object):
 
     def __init__(self, html_text):
-        soup = BeautifulSoup(html_text)
+        print(html_text)
+        soup = BeautifulSoup(html_text,'lxml')
         self.raw=soup.get_text();
         self.sents=nltk.sent_tokenize(self.raw)
         print( "sentences:")
