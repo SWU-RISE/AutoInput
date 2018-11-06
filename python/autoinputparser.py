@@ -10,6 +10,7 @@ from html2text import html2text
 import psycopg2, random
 from casestruct  import *
 
+from randvalue import *
 
 
 
@@ -72,19 +73,20 @@ class Input(object):
 
 
 if __name__=="__main__":
-    t=Test_case()
-    print( t.nextElem())
-    exit(0)
+    # t=Test_case()
+    # print( t.nextElem())
+    # exit(0)
     
     for i in  range(10):
-        print( randchar('a','h'))
+        print( RandChar('a','h'))
         
     try:
         conn = psycopg2.connect(database = "onlinejudge", user = "onlinejudge", password = "onlinejudge", host = "47.95.215.87", port = "5111")
+        cur=conn.cursor() 
     except:
         print( "I am unable to connect to the database")
         print( "Opened database successfully")
-        cur=conn.cursor() 
+
     try:
        cur.execute("""SELECT _id, input_description from problem""")
     except:
