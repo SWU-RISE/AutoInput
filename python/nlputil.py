@@ -39,7 +39,10 @@ def contain(text):
 
 def isParameter(text, w ):
     print w
-    f=text.findall(r"<\d+>(<.*>)<"+w+"> (<.*>)<\d+>")
+    try:
+        f=text.findall(r"<\d+>(<.*>)<"+w+"> (<.*>)<\d+>")
+    except:
+        return False
     
     if f:
         return True
