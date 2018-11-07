@@ -28,9 +28,9 @@ class Input(object):
         soup = BeautifulSoup(html_text,'lxml')
         self.raw=soup.get_text();
         self.sents=nltk.sent_tokenize(self.raw)
-        print( "sentences:")
-        pprint.pprint(self.sents)
-        print ("End sentences.")
+        #print( "sentences:")
+        #pprint.pprint(self.sents)
+        #print ("End sentences.")
 
         self.tokens=nltk.word_tokenize(self.raw)
         self.text=nltk.Text(self.tokens)
@@ -47,10 +47,10 @@ class Input(object):
         print( self.num_words)
 
 
-        possible_para_name=set([ w for w in self.tokens if len(w)==1 and w.isalpha()])
+        possible_parameter_name=set([ w for w in self.tokens if len(w)==1 and w.isalpha()])
 
         self.param=[]
-        for p in possible_para_name:
+        for p in possible_parameter_name:
             if isParameter(self.text, p):
                 self.param.append(Parameter(self, p))
                 
@@ -78,8 +78,8 @@ if __name__=="__main__":
     # print( t.nextElem())
     # exit(0)
     
-    for i in  range(10):
-        print( RandChar('a','h'))
+#    for i in  range(10):
+#        print( RandChar('a','h'))
         
     try:
         conn = psycopg2.connect(database = "onlinejudge", user = "onlinejudge", password = "onlinejudge", host = "47.95.215.87", port = "5111")

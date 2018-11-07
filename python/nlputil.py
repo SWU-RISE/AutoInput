@@ -37,6 +37,8 @@ def contain(text):
 
 
 
+
+
 def isParameter(text, w ):
     print w
     try:
@@ -59,3 +61,4 @@ def isParameter(text, w ):
     if f:
         print f
         return True
+    
