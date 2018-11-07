@@ -24,13 +24,10 @@ FOR_WORD=["each", "every" ]
 class Input(object):
 
     def __init__(self, html_text):
-        print(html_text)
         soup = BeautifulSoup(html_text,'lxml')
         self.raw=soup.get_text();
         self.sents=nltk.sent_tokenize(self.raw)
-        #print( "sentences:")
-        #pprint.pprint(self.sents)
-        #print ("End sentences.")
+
 
         self.tokens=nltk.word_tokenize(self.raw)
         self.text=nltk.Text(self.tokens)
@@ -94,7 +91,9 @@ if __name__=="__main__":
         print( "I can't search in the database")
 
 
+        
     rows=cur.fetchall()
+        
     inputs={}
     
     for row in rows:
