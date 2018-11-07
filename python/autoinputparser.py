@@ -12,7 +12,7 @@ from casestruct  import *
 
 from randvalue import *
 from nlputil import *
-
+import codecs
 
 BLOCK_TYPE=["line", "case", "file"]
 VALUE_TYPE=["integer", "number", "letter" ]
@@ -77,22 +77,51 @@ if __name__=="__main__":
     
 #    for i in  range(10):
 #        print( RandChar('a','h'))
+    
         
-    try:
-        conn = psycopg2.connect(database = "onlinejudge", user = "onlinejudge", password = "onlinejudge", host = "47.95.215.87", port = "5111")
-        cur=conn.cursor() 
-    except:
-        print( "I am unable to connect to the database")
-        print( "Opened database successfully")
+    # try:
+    #     conn = psycopg2.connect(database = "onlinejudge", user = "onlinejudge", password = "onlinejudge", host = "47.95.215.87", port = "5111")
+    #     cur=conn.cursor() 
+    # except:
+    #     print( "I am unable to connect to the database")
+    #     print( "Opened database successfully")
 
-    try:
-       cur.execute("""SELECT _id, input_description from problem""")
-    except:
-        print( "I can't search in the database")
+    # try:
+    #    cur.execute("""SELECT _id, input_description from problem""")
+    # except:
+    #     print( "I can't search in the database")
 
 
-        
-    rows=cur.fetchall()
+    # text=[]
+    # rows=cur.fetchall()
+    # fo = codecs.open("test.txt", "w","utf-8")
+    # for row in rows:
+    #     soup = BeautifulSoup(row[1],'lxml')
+    #     raw=soup.get_text();
+    #     fo.write(raw)
+    #     fo.write("\n\n");
+
+    # fo.close()
+    # exit(0)
+    fo = open("test.txt")
+    raw=fo.read()
+    fo.close()
+    raw = raw.decode('utf8')
+    tokens = word_tokenize(raw)
+    text = nltk.Text(tokens)
+    print("similar n")
+    print (text.similar("n"))
+    print("similar integer")
+    print (text.similar("integer"))
+    print("similar greater")
+    print (text.similar("greater"))
+    exit(0)
+    
+    
+    tokens=nltk.word_tokenize(text)
+    text=nltk.Text(tokens)
+    text.similar("n")
+    exit(1)
         
     inputs={}
     
