@@ -33,7 +33,7 @@ class IndexedText(object):
 def contain(text):
     f=text.findall(r"<contains> <\d+>")
     if f:
-        print f
+        return True
 
 
 
@@ -50,19 +50,31 @@ def isParameter(text, w ):
         return True
     f=text.findall(r"<"+w+"> <.*><\d+>")
     if f:
-        print f
         return True
 
     f=text.findall(r"<\d+><.*><"+w+">")
     if f:
-        print f
         return True
     f=text.findall(r"<"+w+"><is><.*>{,2}<integer>")
     if f:
-        print f
         return True
     
 
+def getAllPossible_parameter_name( tokens):
+    """
+    Obtaining all paramter name
+    """
+    possible_parameter_name=set([ w for w in tokens if len(w)==1 and w.isalpha()])
+    
+    parameters=[]
+    text=nltk.Text(tokens)
+    for p in possible_parameter_name:
+        if isParameter(text, p):
+            parameters.append(Parameter( p))
+            
+    return parameters
+
+    
 def findAllSimilarWords(words):
     re=[]
     f=open("data.txt")
@@ -75,3 +87,16 @@ def findAllSimilarWords(words):
         si=text.similar(w)
         re.append(si)
     return list(set(re))
+
+def getAllCDNumber(raw):
+    """
+    #CD cardinal numeral, e.g. 1,2,3 one two three
+    """
+    tokens=nltk.word_tokenize(raw)
+    text=nltk.Text(tokens)
+    tags=nltk.pos_tag(tokens)
+    CD_words=[] #CD cardinal numeral, e.g. 1,2,3 one two three
+    for (word, tag) in tags:
+        if tag=="CD":
+            CD_words.append(word)
+    return CD_words

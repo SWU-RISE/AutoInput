@@ -36,26 +36,13 @@ class Input(object):
         self.index=IndexedText(porter, self.tokens)
         
         self.tags=nltk.pos_tag(self.tokens)
-        self.num_words=[] #CD cardinal numeral, e.g. 1,2,3 one two three
-        for (word, tag) in self.tags:
-            if tag=="CD":
-                self.num_words.append(word)
-                
-        print( self.num_words)
-
-
-        possible_parameter_name=set([ w for w in self.tokens if len(w)==1 and w.isalpha()])
-
-        self.param=[]
-        for p in possible_parameter_name:
-            if isParameter(self.text, p):
-                self.param.append(Parameter(self, p))
-                
+        self.num_words=getAllCDNumber(self.raw) #CD cardinal numeral, e.g. 1,2,3 one two three
+        self.parameter=getAllPossible_parameter_name(self.tokens) # n, k, m
+                        
         print( "contain:")
         contain(self.text)
         
-                
-                
+                        
         """
         JJ adjective or numeral, ordinal
         third ill-mannered pre-war regrettable oiled calamitous first separable
@@ -86,42 +73,47 @@ def connectDatabase():
 def findAllBlockWords():
     return findAllSimilarWords(BLOCK_TYPE)
 
-
+"""
+Obtaining all input contents 
+"""
 def getAllInputTofile(f):
 
-    （conn, cur)=connectDatabase()
-    if !conn:
+    conn, cur=connectDatabase()
+    if not conn:
         return
     
-
     try:
        cur.execute("""SELECT _id, input_description from problem""")
     except:
         print( "I can't search in the database")
         cur.close()
         conn.close()
-        return 
+        return
 
-    f=open(f,"w")
+    """
+    # write utf-8 data
+    """
+    f=codecs.open(f,"w","utf-8")
     rows=cur.fetchall()
     for row in rows:
         soup = BeautifulSoup(row[1],'lxml')
         raw=soup.get_text();
+        
         f.write(raw)
         f.write("\n")
 
-        
     cur.close()
     conn.close()
-    
     f.close()
-    
+
+"""
+Obtaining all input first line
+""" 
 def getFirstLine(f):
-    （conn, cur)=connectDatabase()
+    conn, cur=connectDatabase()
     
-    if !conn:
+    if not conn:
         return
-
     try:
        cur.execute("""SELECT _id, input_description from problem""")
     except:
@@ -129,8 +121,12 @@ def getFirstLine(f):
         cur.close()
         conn.close()
         return
-
-    f=open(f,"w")    
+    
+    """
+    # write utf-8 data
+    """
+    f=codecs.open(f,"w","utf-8")
+    
     rows=cur.fetchall()
     for row in rows:
         soup = BeautifulSoup(row[1],'lxml')
@@ -138,16 +134,28 @@ def getFirstLine(f):
         sents=nltk.sent_tokenize(raw)
         if len(sents)>0:
             f.write(sents[0])
+            tokens=nltk.word_tokenize(sents[0])
+            text=nltk.Text(tokens)
+            CDs=getAllCDNumber(sents[0])
+            ps=getAllPossible_parameter_name(tokens)
+            f.write("\nCD:")
+            f.write(str(CDs))
+            f.write("\nParamter:")
+            f.write(str(ps))
             f.write("\n")
-        
+            f.write("*************************************\n")
+            
     cur.close()
     conn.close()
     f.close()
 
 
+"""
+Obtaining all input last line
+""" 
 def getLastLine(f):
-    （conn, cur)=connectDatabase()
-    if !conn:
+    conn, cur=connectDatabase()
+    if not conn:
         return
 
     try:
@@ -158,7 +166,10 @@ def getLastLine(f):
         conn.close()
         return
 
-    f=open(f,"w")    
+    """
+    # write utf-8 data
+    """
+    f=codecs.open(f,"w","utf-8")
     rows=cur.fetchall()
     for row in rows:
         soup = BeautifulSoup(row[1],'lxml')
@@ -171,7 +182,8 @@ def getLastLine(f):
     cur.close()
     conn.close()
     f.close()
-    
+
+
 def getNltkText(f):
     fo=open("f")
     raw=fo.read()
@@ -191,13 +203,15 @@ if __name__=="__main__":
     
 #    for i in  range(10):
 #        print( RandChar('a','h'))
-
-    getAllInputTofile("data/allinput.txt")
+    # print("all data")
+    # getAllInputTofile("data/allinput.txt")
+    print("first line")
     getFirstLine("data/allFirstLine.txt")
-    getLastLine("data/allLastLine.txt")
+    # print("last line")
+    # getLastLine("data/allLastLine.txt")
+    exit(0)
     
     
-        
     fo=open("data/data.txt")
 
     raw=fo.read()
