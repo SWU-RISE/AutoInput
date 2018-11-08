@@ -69,13 +69,117 @@ class Input(object):
         self.com_words=[] #JJR  comparative adjective e.g. less, greater
 
 
-
+def connectDatabase():
+    try:
+        conn = psycopg2.connect(database = "onlinejudge", user = "onlinejudge", password = "onlinejudge", host = "47.95.215.87", port = "5111")
+        cur=conn.cursor() 
+    except:
+        print( "I am unable to connect to the database")
+        print( "Opened database successfully")
+        
+        cur.close()
+        conn.close()
+        return (False, False)
+    return (conn, cur)
         
 
 def findAllBlockWords():
     return findAllSimilarWords(BLOCK_TYPE)
 
+
+def getAllInputTofile(f):
+
+    （conn, cur)=connectDatabase()
+    if !conn:
+        return
+    
+
+    try:
+       cur.execute("""SELECT _id, input_description from problem""")
+    except:
+        print( "I can't search in the database")
+        cur.close()
+        conn.close()
+        return 
+
+    f=open(f,"w")
+    rows=cur.fetchall()
+    for row in rows:
+        soup = BeautifulSoup(row[1],'lxml')
+        raw=soup.get_text();
+        f.write(raw)
+        f.write("\n")
+
         
+    cur.close()
+    conn.close()
+    
+    f.close()
+    
+def getFirstLine(f):
+    （conn, cur)=connectDatabase()
+    
+    if !conn:
+        return
+
+    try:
+       cur.execute("""SELECT _id, input_description from problem""")
+    except:
+        print( "I can't search in the database")
+        cur.close()
+        conn.close()
+        return
+
+    f=open(f,"w")    
+    rows=cur.fetchall()
+    for row in rows:
+        soup = BeautifulSoup(row[1],'lxml')
+        raw=soup.get_text();
+        sents=nltk.sent_tokenize(raw)
+        if len(sents)>0:
+            f.write(sents[0])
+            f.write("\n")
+        
+    cur.close()
+    conn.close()
+    f.close()
+
+
+def getLastLine(f):
+    （conn, cur)=connectDatabase()
+    if !conn:
+        return
+
+    try:
+       cur.execute("""SELECT _id, input_description from problem""")
+    except:
+        print( "I can't search in the database")
+        cur.close()
+        conn.close()
+        return
+
+    f=open(f,"w")    
+    rows=cur.fetchall()
+    for row in rows:
+        soup = BeautifulSoup(row[1],'lxml')
+        raw=soup.get_text();
+        sents=nltk.sent_tokenize(raw)
+        if len(sents)>0:
+            f.write(sents[0])
+            f.write("\n")
+        
+    cur.close()
+    conn.close()
+    f.close()
+    
+def getNltkText(f):
+    fo=open("f")
+    raw=fo.read()
+    fo.close()
+    raw = raw.decode('utf8')
+    tokens = word_tokenize(raw)
+    return nltk.Text(tokens)
+    
 
 if __name__=="__main__":
     # print(findAllBlockWords())
@@ -87,35 +191,14 @@ if __name__=="__main__":
     
 #    for i in  range(10):
 #        print( RandChar('a','h'))
+
+    getAllInputTofile("data/allinput.txt")
+    getFirstLine("data/allFirstLine.txt")
+    getLastLine("data/allLastLine.txt")
+    
     
         
-    try:
-        conn = psycopg2.connect(database = "onlinejudge", user = "onlinejudge", password = "onlinejudge", host = "47.95.215.87", port = "5111")
-        cur=conn.cursor() 
-    except:
-        print( "I am unable to connect to the database")
-        print( "Opened database successfully")
-
-    try:
-       cur.execute("""SELECT _id, input_description from problem""")
-    except:
-        print( "I can't search in the database")
-
-
-    text=[]
-    rows=cur.fetchall()
-    nums=[]
-    for row in rows:
-        soup = BeautifulSoup(row[1],'lxml')
-        raw=soup.get_text();
-        sents=nltk.sent_tokenize(raw)
-        if len(sents)>0:
-            print(sents[0])
-            print(len(sents))
-            nums.append(len(sents))
-    fdist = nltk.FreqDist(nums)
-    fdist.most_common(3)
-    exit(0)
+    fo=open("data/data.txt")
 
     raw=fo.read()
     fo.close()
@@ -128,6 +211,8 @@ if __name__=="__main__":
     print (text.similar("integer"))
     print("similar greater")
     print (text.similar("greater"))
+    print("similar one")
+    print (text.similar("one"))
     exit(0)
     
     
