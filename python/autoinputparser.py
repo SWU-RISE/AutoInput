@@ -70,7 +70,17 @@ class Input(object):
 
 
 
+        
+
+def findAllBlockWords():
+    return findAllSimilarWords(BLOCK_TYPE)
+
+        
+
 if __name__=="__main__":
+    # print(findAllBlockWords())
+    # exit(0)
+    
     # t=Test_case()
     # print( t.nextElem())
     # exit(0)
@@ -79,31 +89,34 @@ if __name__=="__main__":
 #        print( RandChar('a','h'))
     
         
-    # try:
-    #     conn = psycopg2.connect(database = "onlinejudge", user = "onlinejudge", password = "onlinejudge", host = "47.95.215.87", port = "5111")
-    #     cur=conn.cursor() 
-    # except:
-    #     print( "I am unable to connect to the database")
-    #     print( "Opened database successfully")
+    try:
+        conn = psycopg2.connect(database = "onlinejudge", user = "onlinejudge", password = "onlinejudge", host = "47.95.215.87", port = "5111")
+        cur=conn.cursor() 
+    except:
+        print( "I am unable to connect to the database")
+        print( "Opened database successfully")
 
-    # try:
-    #    cur.execute("""SELECT _id, input_description from problem""")
-    # except:
-    #     print( "I can't search in the database")
+    try:
+       cur.execute("""SELECT _id, input_description from problem""")
+    except:
+        print( "I can't search in the database")
 
 
-    # text=[]
-    # rows=cur.fetchall()
-    # fo = codecs.open("test.txt", "w","utf-8")
-    # for row in rows:
-    #     soup = BeautifulSoup(row[1],'lxml')
-    #     raw=soup.get_text();
-    #     fo.write(raw)
-    #     fo.write("\n\n");
+    text=[]
+    rows=cur.fetchall()
+    nums=[]
+    for row in rows:
+        soup = BeautifulSoup(row[1],'lxml')
+        raw=soup.get_text();
+        sents=nltk.sent_tokenize(raw)
+        if len(sents)>0:
+            print(sents[0])
+            print(len(sents))
+            nums.append(len(sents))
+    fdist = nltk.FreqDist(nums)
+    fdist.most_common(3)
+    exit(0)
 
-    # fo.close()
-    # exit(0)
-    fo = open("test.txt")
     raw=fo.read()
     fo.close()
     raw = raw.decode('utf8')

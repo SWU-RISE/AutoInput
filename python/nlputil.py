@@ -62,3 +62,16 @@ def isParameter(text, w ):
         print f
         return True
     
+
+def findAllSimilarWords(words):
+    re=[]
+    f=open("data.txt")
+    raw=f.read()
+    f.close()
+    raw=raw.decode('utf8')
+    tokens=word_tokenize(raw)
+    text=nltk.Text(tokens)
+    for w in words:
+        si=text.similar(w)
+        re.append(si)
+    return list(set(re))
